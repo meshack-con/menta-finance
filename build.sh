@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+git clone https://github.com/flutter/flutter.git -b stable --depth 1 _flutter
+export PATH="$PATH:$PWD/_flutter/bin"
+flutter config --enable-web
+flutter pub get
+flutter build web --release --dart-define=API_BASE_URL=https://umis-admin-backend.onrender.com
