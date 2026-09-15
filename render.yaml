@@ -1,0 +1,41 @@
+# render.yaml - Blueprint ya Render kwa backend ya umis_admin (FastAPI + PostgreSQL)
+#
+# JINSI YA KUTUMIA:
+# 1. Weka faili hili kwenye MZIZI (root) wa GitHub repo yako (siyo ndani ya backend/).
+# 2. Kwenye Render dashboard: New -> Blueprint -> chagua repo yako -> Render itasoma
+#    faili hili kiotomatiki na kuunda service.
+# 3. Baada ya kuunda, nenda "Environment" ya service na weka (kwa mkono, kwa sababu
+#    ni siri/secrets) thamani za DATABASE_URL (kutoka Neon), JWT_SECRET_KEY,
+#    SEED_ADMIN_USERNAME/PASSWORD, SEED_MANAGER_USERNAME/PASSWORD.
+# 4. CORS_ORIGINS - baada ya kupata URL ya Vercel (mfano https://umis-admin.vercel.app),
+#    iweke hapa (au moja kwa moja kwenye dashboard).
+
+services:
+  - type: web
+    name: umis-admin-backend
+    runtime: python
+    rootDir: backend
+    plan: free
+    region: frankfurt
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    healthCheckPath: /docs
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+      - key: DATABASE_URL
+        sync: false # utaweka mwenyewe - connection string kutoka Neon
+      - key: JWT_SECRET_KEY
+        generateValue: true # Render itazalisha secret salama kiotomatiki
+      - key: JWT_ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "480"
+      - key: CORS_ORIGINS
+        sync: false # utaweka URL ya Vercel baada ya kuideploy frontend
+      - key: SEED_ADMIN_USERNAME
+        sync: false
+      - key: SEED_ADMIN_PASSWORD
+        sync: false
+      - key: SEED_MANAGER_USERNAME
+        sync: false
+      - key: SEED_MANAGER_PASSWORD
+        sync: false
