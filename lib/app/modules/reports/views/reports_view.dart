@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+﻿import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -148,69 +148,95 @@ class _ReportsBody extends StatelessWidget {
         ),
         const SizedBox(height: 16),
 
-        _ReportCard(
-          icon: Icons.pie_chart_outline_rounded,
-          iconColor: AppColors.primaryGreen,
+        _safeCard(
+          () => _ReportCard(
+            icon: Icons.pie_chart_outline_rounded,
+            iconColor: AppColors.primaryGreen,
+            title: 'Ripoti ya Mapato na Matumizi (Kila Mwezi)',
+            description:
+                'Ripoti kamili yenye kurasa kadhaa: Muhtasari, Income Register, Top Clients, Expense Register, Matumizi kwa Category, na Management Decision Dashboard - data halisi ya mfumo.',
+            stats: [
+              _CardStat('Income Mwezi Huu', _fmtMoney(totals['income_month'] ?? 0), AppColors.primaryGreen),
+              _CardStat('Expenses Mwezi Huu', _fmtMoney(totals['expenses_month'] ?? 0), AppColors.danger),
+              _CardStat('Net Profit', _fmtMoney(totals['net_profit_month'] ?? 0), AppColors.primaryTeal),
+            ],
+            fileName: 'ripoti-mapato-matumizi-${DateTime.now().millisecondsSinceEpoch}.pdf',
+            buildPdf: () => ReportPdfBuilder.buildFinancialMonthlyReport(data),
+          ),
           title: 'Ripoti ya Mapato na Matumizi (Kila Mwezi)',
-          description:
-              'Ripoti kamili yenye kurasa kadhaa: Muhtasari, Income Register, Top Clients, Expense Register, Matumizi kwa Category, na Management Decision Dashboard - data halisi ya mfumo.',
-          stats: [
-            _CardStat('Income Mwezi Huu', _fmtMoney(totals['income_month'] ?? 0), AppColors.primaryGreen),
-            _CardStat('Expenses Mwezi Huu', _fmtMoney(totals['expenses_month'] ?? 0), AppColors.danger),
-            _CardStat('Net Profit', _fmtMoney(totals['net_profit_month'] ?? 0), AppColors.primaryTeal),
-          ],
-          fileName: 'ripoti-mapato-matumizi-${DateTime.now().millisecondsSinceEpoch}.pdf',
-          buildPdf: () => ReportPdfBuilder.buildFinancialMonthlyReport(data),
         ),
         const SizedBox(height: 16),
 
-        _ReportCard(
-          icon: Icons.dynamic_feed_outlined,
-          iconColor: AppColors.primaryTeal,
+        _safeCard(
+          () => _ReportCard(
+            icon: Icons.dynamic_feed_outlined,
+            iconColor: AppColors.primaryTeal,
+            title: 'Ripoti ya Performance za Projects',
+            description:
+                'Orodha kamili ya Projects zote - kiasi, kilicholipwa, kinachodaiwa, deadline na hali (Kamili / Inaendelea / Imechelewa).',
+            stats: [
+              _CardStat('Jumla ya Projects', '${totals['projects'] ?? 0}', AppColors.primaryTeal),
+              _CardStat('Zilizokamilika', '${totals['completed_projects'] ?? 0}', AppColors.primaryGreen),
+              _CardStat('Zilizochelewa', '${totals['overdue_projects'] ?? 0}', AppColors.danger),
+            ],
+            fileName: 'ripoti-performance-projects-${DateTime.now().millisecondsSinceEpoch}.pdf',
+            buildPdf: () => ReportPdfBuilder.buildProjectPerformanceReport(data),
+          ),
           title: 'Ripoti ya Performance za Projects',
-          description:
-              'Orodha kamili ya Projects zote - kiasi, kilicholipwa, kinachodaiwa, deadline na hali (Kamili / Inaendelea / Imechelewa).',
-          stats: [
-            _CardStat('Jumla ya Projects', '${totals['projects'] ?? 0}', AppColors.primaryTeal),
-            _CardStat('Zilizokamilika', '${totals['completed_projects'] ?? 0}', AppColors.primaryGreen),
-            _CardStat('Zilizochelewa', '${totals['overdue_projects'] ?? 0}', AppColors.danger),
-          ],
-          fileName: 'ripoti-performance-projects-${DateTime.now().millisecondsSinceEpoch}.pdf',
-          buildPdf: () => ReportPdfBuilder.buildProjectPerformanceReport(data),
         ),
         const SizedBox(height: 16),
 
-        _ReportCard(
-          icon: Icons.people_alt_outlined,
-          iconColor: AppColors.info,
+        _safeCard(
+          () => _ReportCard(
+            icon: Icons.people_alt_outlined,
+            iconColor: AppColors.info,
+            title: 'Ripoti ya Wateja (Clients)',
+            description:
+                'Orodha kamili ya Clients wote - jumla ya Income kwa kila mmoja, idadi ya Projects, na deni (outstanding) lililopo.',
+            stats: [
+              _CardStat('Jumla ya Clients', '${totals['clients'] ?? 0}', AppColors.info),
+              _CardStat('Outstanding (Deni)', _fmtMoney(totals['outstanding'] ?? 0), AppColors.warning),
+            ],
+            fileName: 'ripoti-wateja-${DateTime.now().millisecondsSinceEpoch}.pdf',
+            buildPdf: () => ReportPdfBuilder.buildClientsReport(data),
+          ),
           title: 'Ripoti ya Wateja (Clients)',
-          description: 'Orodha kamili ya Clients wote - jumla ya Income kwa kila mmoja, idadi ya Projects, na deni (outstanding) lililopo.',
-          stats: [
-            _CardStat('Jumla ya Clients', '${totals['clients'] ?? 0}', AppColors.info),
-            _CardStat('Outstanding (Deni)', _fmtMoney(totals['outstanding'] ?? 0), AppColors.warning),
-          ],
-          fileName: 'ripoti-wateja-${DateTime.now().millisecondsSinceEpoch}.pdf',
-          buildPdf: () => ReportPdfBuilder.buildClientsReport(data),
         ),
         const SizedBox(height: 16),
 
-        _ReportCard(
-          icon: Icons.insights_outlined,
-          iconColor: AppColors.primaryGreen,
+        _safeCard(
+          () => _ReportCard(
+            icon: Icons.insights_outlined,
+            iconColor: AppColors.primaryGreen,
+            title: 'Ripoti Kuu ya Mfumo (Muhtasari wa Menejimenti)',
+            description:
+                'Muhtasari mkubwa wa kampuni kwa uongozi - Income/Expenses, Top Clients, Top Projects na mwenendo wa miezi 6, kwa maamuzi ya kimkakati.',
+            stats: [
+              _CardStat('Clients', '${totals['clients'] ?? 0}', AppColors.primaryTeal),
+              _CardStat('Projects', '${totals['projects'] ?? 0}', AppColors.primaryTeal),
+              _CardStat('Income Total', _fmtMoney(totals['income_total'] ?? 0), AppColors.primaryGreen),
+            ],
+            fileName: 'ripoti-kuu-mfumo-${DateTime.now().millisecondsSinceEpoch}.pdf',
+            buildPdf: () => ReportPdfBuilder.buildExecutiveSummaryReport(data),
+          ),
           title: 'Ripoti Kuu ya Mfumo (Muhtasari wa Menejimenti)',
-          description:
-              'Muhtasari mkubwa wa kampuni kwa uongozi - Income/Expenses, Top Clients, Top Projects na mwenendo wa miezi 6, kwa maamuzi ya kimkakati.',
-          stats: [
-            _CardStat('Clients', '${totals['clients'] ?? 0}', AppColors.primaryTeal),
-            _CardStat('Projects', '${totals['projects'] ?? 0}', AppColors.primaryTeal),
-            _CardStat('Income Total', _fmtMoney(totals['income_total'] ?? 0), AppColors.primaryGreen),
-          ],
-          fileName: 'ripoti-kuu-mfumo-${DateTime.now().millisecondsSinceEpoch}.pdf',
-          buildPdf: () => ReportPdfBuilder.buildExecutiveSummaryReport(data),
         ),
         const SizedBox(height: 20),
       ],
     );
+  }
+
+  /// Ujenzi wa kadi moja "kwa usalama" - kama data ya ripoti hii moja
+  /// (mfano field fulani ya `totals` haipo/aina yake si sahihi) ikisababisha
+  /// hitilafu wakati wa ku-build, TUNAONYESHA KADI YA HITILAFU MAHALI PA HIYO
+  /// KADI TU (yenye jina la ripoti husika) - badala ya ripoti ZOTE nne
+  /// kutoweka na kuacha "blank gray box" kubwa mahali pake.
+  Widget _safeCard(Widget Function() builder, {required String title}) {
+    try {
+      return builder();
+    } catch (e) {
+      return _ErrorCardFallback(title: title, error: e.toString());
+    }
   }
 
   Widget _quickStat(String label, String value, Color color) {
@@ -222,6 +248,51 @@ class _ReportsBody extends StatelessWidget {
         const SizedBox(height: 2),
         Text(value, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: color)),
       ],
+    );
+  }
+}
+
+/// Kadi inayoonekana PALE PALE ambapo ripoti fulani imeshindwa kujengwa -
+/// inaonyesha jina la ripoti husika + ujumbe wa hitilafu, na kitufe cha
+/// "Jaribu tena" (kinachochochea upya ukurasa mzima kupitia refresh).
+class _ErrorCardFallback extends StatelessWidget {
+  final String title;
+  final String error;
+  const _ErrorCardFallback({required this.title, required this.error});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.dangerBg,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.danger.withOpacity(0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.error_outline, color: AppColors.danger, size: 18),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  '"$title" imeshindwa kuonyesha',
+                  style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: AppColors.danger),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Get.find<ReportsStore>().refresh(),
+                child: const Text('Jaribu tena'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(error, style: const TextStyle(fontSize: 11.5, color: AppColors.danger)),
+        ],
+      ),
     );
   }
 }
