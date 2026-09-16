@@ -1,4 +1,4 @@
-﻿import 'dart:typed_data';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -111,7 +111,7 @@ class _ReportsBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final totals = (data['totals'] as Map<String, dynamic>?) ?? {};
     final generatedAt = DateTime.tryParse(data['generated_at']?.toString() ?? '') ?? DateTime.now();
-    final dateFmt = DateFormat('dd/MM/yyyy • HH:mm');
+    final dateFmt = DateFormat('dd/MM/yyyy � HH:mm');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,16 +125,23 @@ class _ReportsBody extends StatelessWidget {
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: AppColors.border),
           ),
-          child: Wrap(
-            spacing: 22,
-            runSpacing: 10,
-            crossAxisAlignment: WrapCrossAlignment.center,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _quickStat('Income Mwezi Huu', _fmtMoney(totals['income_month'] ?? 0), AppColors.primaryGreen),
-              _quickStat('Net Profit Mwezi Huu', _fmtMoney(totals['net_profit_month'] ?? 0), AppColors.primaryTeal),
-              _quickStat('Outstanding', _fmtMoney(totals['outstanding'] ?? 0), AppColors.warning),
-              _quickStat('Projects Zilizochelewa', '${totals['overdue_projects'] ?? 0}', AppColors.danger),
-              const Spacer(),
+              Expanded(
+                child: Wrap(
+                  spacing: 22,
+                  runSpacing: 10,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    _quickStat('Income Mwezi Huu', _fmtMoney(totals['income_month'] ?? 0), AppColors.primaryGreen),
+                    _quickStat('Net Profit Mwezi Huu', _fmtMoney(totals['net_profit_month'] ?? 0), AppColors.primaryTeal),
+                    _quickStat('Outstanding', _fmtMoney(totals['outstanding'] ?? 0), AppColors.warning),
+                    _quickStat('Projects Zilizochelewa', '${totals['overdue_projects'] ?? 0}', AppColors.danger),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
               Text('Data ya mwisho: ${dateFmt.format(generatedAt)}', style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary)),
             ],
           ),
